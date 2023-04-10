@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_MainPage"
+        android:title="@string/mainpage"
+        android:icon="@drawable/mainpage" />
+
+    <item
+        android:id="@+id/menuProfile"
+        android:title="@string/profile"
+        android:icon="@drawable/profile" />
+
+    <item
+        android:id="@+id/menu_Form"
+        android:title="@string/form"
+        android:icon="@drawable/form" />
+
+    <item
+        android:id="@+id/menu_Food"
+        android:title="@string/food"
+        android:icon="@drawable/foodlist" />
+
+    <item
+        android:title="@string/others">
+        <menu>
+            <item
+                android:id="@+id/menu_Info"
+                android:title="@string/info"
+                android:icon="@drawable/info" />
+
+            <item
+                android:id="@+id/menu_Feedback"
+                android:title="@string/feedback"
+                android:icon="@drawable/feedback" />
+
+            <item
+                android:id="@+id/menu_Logout"
+                android:title="@string/logout"
+                android:icon="@drawable/logout" />
+        </menu>
+    </item>
+
+</menu>

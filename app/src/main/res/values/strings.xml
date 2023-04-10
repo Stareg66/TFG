@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">TFG</string>
+    <string name="TFG" />
+    <string name="welcomeText">Aplicación para TFG</string>
+    <string name="profile">Perfil de usuario</string>
+    <string name="info">Información</string>
+    <string name="logout">Cerrar sesión</string>
+    <string name="form">Formulario</string>
+    <string name="food">Lista de comidas</string>
+    <string name="others">Otros</string>
+    <string name="feedback">Feedback</string>
+    <string name="creatorName">Manuel Rueda Algar</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="mainpage">Página principal</string>
+</resources>
