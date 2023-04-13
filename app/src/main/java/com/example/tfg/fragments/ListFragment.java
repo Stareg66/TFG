@@ -1,12 +1,22 @@
-package com.example.tfg;
+package com.example.tfg.fragments;
 
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
+
+import com.example.tfg.R;
+import com.example.tfg.food.Food;
+import com.example.tfg.food.FoodListAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -58,7 +68,36 @@ public class ListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_list, container, false);
+
+        View view = inflater.inflate(R.layout.fragment_list, container, false);
+
+        ListView listView = view.findViewById(R.id.listView_food);
+
+        List<Food> foodList = new ArrayList<>();
+        foodList.add(new Food(1, "Pizza", 285));
+        foodList.add(new Food(2, "Burger", 354));
+        foodList.add(new Food(3, "Pasta", 221));
+
+        FoodListAdapter adapter = new FoodListAdapter(getActivity(), R.layout.food_inlist, foodList);
+
+        listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                Food food = foodList.get(position);
+                String foodName = food.getFoodName();
+                String foodCalories = String.valueOf(food.getKcal());
+
+                // Create the detail fragment and add it to the activity
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.nav_host_fragment, FoodDetailedFragment.newInstance(foodName, foodCalories))
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
+
+        return view;
     }
 }

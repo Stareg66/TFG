@@ -6,32 +6,37 @@
     app:startDestination="@id/menu_MainPage">
     <fragment
         android:id="@+id/menu_MainPage"
-        android:name="com.example.tfg.MainPageFragment"
+        android:name="com.example.tfg.fragments.MainPageFragment"
         android:label="MainPage"
         tools:layout="@layout/fragment_mainpage" />
     <fragment
         android:id="@+id/menuProfile"
-        android:name="com.example.tfg.ProfileFragment"
+        android:name="com.example.tfg.fragments.ProfileFragment"
         android:label="Profile"
         tools:layout="@layout/fragment_profile" />
     <fragment
         android:id="@+id/menu_Form"
-        android:name="com.example.tfg.FormFragment"
+        android:name="com.example.tfg.fragments.FormFragment"
         android:label="Form"
         tools:layout="@layout/fragment_form" />
     <fragment
         android:id="@+id/menu_Food"
-        android:name="com.example.tfg.ListFragment"
+        android:name="com.example.tfg.fragments.ListFragment"
         android:label="Food List"
         tools:layout="@layout/fragment_list" />
     <fragment
         android:id="@+id/menu_Info"
-        android:name="com.example.tfg.InfoFragment"
+        android:name="com.example.tfg.fragments.InfoFragment"
         android:label="Info"
         tools:layout="@layout/fragment_info" />
     <fragment
         android:id="@+id/menu_Feedback"
-        android:name="com.example.tfg.FeedbackFragment"
+        android:name="com.example.tfg.fragments.FeedbackFragment"
         android:label="Feedback"
         tools:layout="@layout/fragment_feedback" />
+    <fragment
+        android:id="@+id/foodDetailedFragment"
+        android:name="com.example.tfg.fragments.FoodDetailedFragment"
+        android:label="fragment_food_detailed"
+        tools:layout="@layout/fragment_food_detailed" />
 </navigation>
