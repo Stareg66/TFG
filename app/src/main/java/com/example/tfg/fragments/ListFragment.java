@@ -9,7 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.SearchView;
 
 import com.example.tfg.R;
 import com.example.tfg.food.Food;
@@ -71,21 +73,50 @@ public class ListFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_list, container, false);
 
+        SearchView searchView = view.findViewById(R.id.search_view);
+
+        searchView.setIconifiedByDefault(false);
+        searchView.setQueryHint("Buscar comida...");
+
         ListView listView = view.findViewById(R.id.listView_food);
 
         List<Food> foodList = new ArrayList<>();
         foodList.add(new Food(1, "Pizza", 285));
         foodList.add(new Food(2, "Burger", 354));
         foodList.add(new Food(3, "Pasta", 221));
+        foodList.add(new Food(4, "Prueba1", 285));
+        foodList.add(new Food(5, "Prueba2", 354));
+        foodList.add(new Food(6, "Prueba3", 221));
+        foodList.add(new Food(7, "Prueba4", 221));
+        foodList.add(new Food(8, "Prueba5", 221));
+        foodList.add(new Food(9, "Prueba6", 221));
+        foodList.add(new Food(10, "Prueba7", 221));
+        foodList.add(new Food(11, "Prueba8", 221));
+        foodList.add(new Food(12, "Prueba9", 221));
 
-        FoodListAdapter adapter = new FoodListAdapter(getActivity(), R.layout.food_inlist, foodList);
-
+        FoodListAdapter adapter = new FoodListAdapter(getActivity(), 8, foodList);
         listView.setAdapter(adapter);
+
+        Button previousButton = view.findViewById(R.id.previous_button);
+        previousButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                adapter.goToPreviousPage();
+            }
+        });
+
+        Button nextButton = view.findViewById(R.id.next_button);
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                adapter.goToNextPage();
+            }
+        });
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Food food = foodList.get(position);
+                Food food = adapter.getItem(position);
                 String foodName = food.getFoodName();
                 String foodCalories = String.valueOf(food.getKcal());
 
@@ -98,6 +129,23 @@ public class ListFragment extends Fragment {
             }
         });
 
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                adapter.getFilter().filter(s);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                if(s.isEmpty()){
+                    adapter.clearFilter();
+                }
+                return true;
+            }
+        });
+
         return view;
     }
+
 }
