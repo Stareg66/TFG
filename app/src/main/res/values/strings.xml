@@ -15,4 +15,7 @@
     <string name="mainpage">Página principal</string>
     <string name="foodnameinlist">Food name</string>
     <string name="foodcaloriesinlist">Food calories</string>
+    <string name="formMainPage">Formulario</string>
+    <string name="profileMainPage">Perfil</string>
+    <string name="foodListMainPage">Comidas</string>
 </resources>
