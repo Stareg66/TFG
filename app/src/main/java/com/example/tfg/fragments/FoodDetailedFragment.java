@@ -19,17 +19,17 @@ import com.example.tfg.R;
 public class FoodDetailedFragment extends Fragment {
 
     private TextView mFoodName;
-    private TextView mFoodCalories;
+    //private TextView mFoodCalories;
 
     public FoodDetailedFragment() {
         // Required empty public constructor
     }
 
-    public static FoodDetailedFragment newInstance(String foodName, String foodCalories) {
+    public static FoodDetailedFragment newInstance(String foodName) {
         FoodDetailedFragment fragment = new FoodDetailedFragment();
         Bundle args = new Bundle();
         args.putString("foodName", foodName);
-        args.putString("foodCalories", foodCalories);
+        //args.putString("foodCalories", foodCalories);
         fragment.setArguments(args);
         return fragment;
     }
@@ -40,11 +40,11 @@ public class FoodDetailedFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_food_detailed, container, false);
 
         mFoodName = rootView.findViewById(R.id.foodName_detailed);
-        mFoodCalories = rootView.findViewById(R.id.foodCalories_detailed);
+        //mFoodCalories = rootView.findViewById(R.id.foodCalories_detailed);
 
         if (getArguments() != null) {
             mFoodName.setText(getArguments().getString("foodName"));
-            mFoodCalories.setText(getArguments().getString("foodCalories"));
+            //mFoodCalories.setText(getArguments().getString("foodCalories"));
         }
 
         return rootView;

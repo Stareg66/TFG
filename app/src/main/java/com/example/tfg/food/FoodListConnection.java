@@ -1,10 +1,8 @@
 package com.example.tfg.food;
 
 import android.os.AsyncTask;
-import android.widget.ListView;
 
-import com.example.tfg.MainActivity;
-import com.example.tfg.R;
+import com.example.tfg.fragments.ListFragment;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
@@ -16,10 +14,12 @@ import java.net.URL;
 
 public class FoodListConnection extends AsyncTask<String, Void, Food[]>{
 
-        private final WeakReference<MainActivity> mainActivityReference;
+        private final WeakReference<ListFragment> listFragmentWeakReference;
+        private final WeakReference<FoodListAdapter> adapterWeakReference;
 
-        public FoodListConnection(MainActivity activity) {
-            mainActivityReference = new WeakReference<>(activity);
+        public FoodListConnection(ListFragment activity, FoodListAdapter adapter) {
+            listFragmentWeakReference = new WeakReference<>(activity);
+            adapterWeakReference = new WeakReference<>(adapter);
         }
 
         @Override
@@ -33,6 +33,7 @@ public class FoodListConnection extends AsyncTask<String, Void, Food[]>{
 
             try {
                 url = new URL(urls[0]);
+
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
                 conn.setUseCaches(false);
@@ -57,24 +58,13 @@ public class FoodListConnection extends AsyncTask<String, Void, Food[]>{
             return null;
         }
 
-        /*protected void onPostExecute(Food[] result){
+        protected void onPostExecute(Food[] result){
             super.onPostExecute(result);
 
-            if (result != null) {
-                MainActivity mainActivity = mainActivityReference.get();
-                ListView listView = mainActivity.findViewById(R.id.list);
-
-                MainActivity.articulos=new ArrayList<>();
-                MainActivity.categoriaArticulos=new ArrayList<>();
-                for (Article article : result) {
-                    MainActivity.articulos.add(article);
-                    MainActivity.categoriaArticulos.add(article);
-                }
-
-                ListaArticulosAdapter lAdapter = new ListaArticulosAdapter(mainActivity,MainActivity.categoriaArticulos);
-                listView.setAdapter(lAdapter);
-                mainActivity.setOnClickListener();
-
+            FoodListAdapter adapter = adapterWeakReference.get();
+            if(result != null){
+                adapter.updateData(result);
             }
-        }*/
+            adapter.notifyDataSetChanged();
+        }
 }

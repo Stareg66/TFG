@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import com.example.tfg.R;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class FoodListAdapter extends BaseAdapter implements Filterable {
@@ -33,6 +34,14 @@ public class FoodListAdapter extends BaseAdapter implements Filterable {
         this.foods = foods;
         this.filteredFoods = new ArrayList<>(foods);
         this.foodFilter = new FoodFilter();
+    }
+
+    public void updateData(Food[] newFoods){
+        foods.clear();
+        filteredFoods.clear();
+        foods.addAll(Arrays.asList(newFoods));
+        filteredFoods.addAll(Arrays.asList(newFoods));
+        notifyDataSetChanged();
     }
 
     public int getCount(){
@@ -78,11 +87,11 @@ public class FoodListAdapter extends BaseAdapter implements Filterable {
         }
 
         TextView foodNameTextView = convertView.findViewById(R.id.foodName_inList);
-        TextView foodCaloriesTextView = convertView.findViewById(R.id.foodCalories_inList);
+        //TextView foodCaloriesTextView = convertView.findViewById(R.id.foodCalories_inList);
 
         Food food = getItem(position);
         foodNameTextView.setText(food.getFoodName());
-        foodCaloriesTextView.setText(String.valueOf(food.getKcal()));
+        //foodCaloriesTextView.setText(String.valueOf(food.getKcal()));
         return convertView;
     }
 

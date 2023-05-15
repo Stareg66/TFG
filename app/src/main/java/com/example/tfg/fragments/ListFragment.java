@@ -16,39 +16,25 @@ import android.widget.SearchView;
 import com.example.tfg.R;
 import com.example.tfg.food.Food;
 import com.example.tfg.food.FoodListAdapter;
+import com.example.tfg.food.FoodListConnection;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ListFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class ListFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private ListView listView;
+    private FoodListAdapter adapter;
 
     public ListFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ListFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static ListFragment newInstance(String param1, String param2) {
         ListFragment fragment = new ListFragment();
         Bundle args = new Bundle();
@@ -78,7 +64,7 @@ public class ListFragment extends Fragment {
         searchView.setIconifiedByDefault(false);
         searchView.setQueryHint("Buscar comida...");
 
-        ListView listView = view.findViewById(R.id.listView_food);
+        /*ListView listView = view.findViewById(R.id.listView_food);
 
         List<Food> foodList = new ArrayList<>();
         foodList.add(new Food(1, "Pizza", 285));
@@ -95,7 +81,14 @@ public class ListFragment extends Fragment {
         foodList.add(new Food(12, "Prueba9", 221));
 
         FoodListAdapter adapter = new FoodListAdapter(getActivity(), 8, foodList);
+        listView.setAdapter(adapter);*/
+
+        listView = view.findViewById(R.id.listView_food);
+        adapter = new FoodListAdapter(getActivity(), 8, new ArrayList<>());
         listView.setAdapter(adapter);
+
+        FoodListConnection connection = new FoodListConnection(this, adapter);
+        connection.execute("https://sanger.dia.fi.upm.es/foodnorm/foods");
 
         Button previousButton = view.findViewById(R.id.previous_button);
         previousButton.setOnClickListener(new View.OnClickListener() {
@@ -118,12 +111,11 @@ public class ListFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Food food = adapter.getItem(position);
                 String foodName = food.getFoodName();
-                String foodCalories = String.valueOf(food.getKcal());
 
                 // Create the detail fragment and add it to the activity
                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                 fragmentManager.beginTransaction()
-                        .replace(R.id.nav_host_fragment, FoodDetailedFragment.newInstance(foodName, foodCalories))
+                        .replace(R.id.nav_host_fragment, FoodDetailedFragment.newInstance(foodName))//, foodCalories))
                         .addToBackStack(null)
                         .commit();
             }
@@ -146,6 +138,10 @@ public class ListFragment extends Fragment {
         });
 
         return view;
+    }
+
+    public FoodListAdapter getFoodListAdapter(){
+        return adapter;
     }
 
 }

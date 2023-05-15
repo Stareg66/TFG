@@ -18,4 +18,7 @@
     <string name="formMainPage">Formulario</string>
     <string name="profileMainPage">Perfil</string>
     <string name="foodListMainPage">Comidas</string>
+    <string name="firstDayTab">Primer día</string>
+    <string name="secondDayTab">Segundo día</string>
+    <string name="thirdDayTab">Tercer día</string>
 </resources>

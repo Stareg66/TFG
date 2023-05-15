@@ -1,25 +1,20 @@
 package com.example.tfg.food;
 
 public class Food {
-    private final Integer id;
-    private final String foodName;
-    private final Integer kcal;
+    private final Integer food_id;
+    private final String nombre_es;
 
-    public Food(Integer id, String foodName, Integer kcal){
-        this.id = id;
-        this.foodName = foodName;
-        this.kcal = kcal;
+    public Food(Integer food_id, String nombre_es){
+        this.food_id = food_id;
+        this.nombre_es = nombre_es;
     }
 
     public Integer getId() {
-        return id;
+        return food_id;
     }
 
     public String getFoodName() {
-        return foodName;
+        return nombre_es;
     }
 
-    public Integer getKcal() {
-        return kcal;
-    }
 }
