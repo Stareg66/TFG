@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Arrays;
 
 public class FoodListConnection extends AsyncTask<String, Void, Food[]>{
 
@@ -63,7 +64,7 @@ public class FoodListConnection extends AsyncTask<String, Void, Food[]>{
 
             FoodListAdapter adapter = adapterWeakReference.get();
             if(result != null){
-                adapter.updateData(result);
+                adapter.updateData(Arrays.asList(result));
             }
             adapter.notifyDataSetChanged();
         }

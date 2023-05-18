@@ -12,11 +12,11 @@
         android:layout_alignParentTop="true"/>
 
     <ListView
-            android:id="@+id/listView_food"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/button_layout"
-            android:layout_below="@id/search_view"/>
+        android:id="@+id/listView_food"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/button_layout"
+        android:layout_below="@id/search_view"/>
 
     <LinearLayout
         android:id="@+id/button_layout"

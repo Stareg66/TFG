@@ -64,25 +64,6 @@ public class ListFragment extends Fragment {
         searchView.setIconifiedByDefault(false);
         searchView.setQueryHint("Buscar comida...");
 
-        /*ListView listView = view.findViewById(R.id.listView_food);
-
-        List<Food> foodList = new ArrayList<>();
-        foodList.add(new Food(1, "Pizza", 285));
-        foodList.add(new Food(2, "Burger", 354));
-        foodList.add(new Food(3, "Pasta", 221));
-        foodList.add(new Food(4, "Prueba1", 285));
-        foodList.add(new Food(5, "Prueba2", 354));
-        foodList.add(new Food(6, "Prueba3", 221));
-        foodList.add(new Food(7, "Prueba4", 221));
-        foodList.add(new Food(8, "Prueba5", 221));
-        foodList.add(new Food(9, "Prueba6", 221));
-        foodList.add(new Food(10, "Prueba7", 221));
-        foodList.add(new Food(11, "Prueba8", 221));
-        foodList.add(new Food(12, "Prueba9", 221));
-
-        FoodListAdapter adapter = new FoodListAdapter(getActivity(), 8, foodList);
-        listView.setAdapter(adapter);*/
-
         listView = view.findViewById(R.id.listView_food);
         adapter = new FoodListAdapter(getActivity(), 8, new ArrayList<>());
         listView.setAdapter(adapter);
