@@ -3,20 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="15dp">
 
     <TextView
         android:id="@+id/foodName_inList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="20sp"
-        android:textStyle="bold"
         android:text="Food Name"/>
 
-    <TextView
-        android:id="@+id/foodCalories_inList"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:text="Calories"/>
 </LinearLayout>

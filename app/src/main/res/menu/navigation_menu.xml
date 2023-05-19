@@ -1,24 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/menu_MainPage"
         android:title="@string/mainpage"
-        android:icon="@drawable/mainpage" />
+        android:icon="@drawable/mainpage"
+        app:destination="@id/menu_MainPage"/>
 
     <item
         android:id="@+id/menuProfile"
         android:title="@string/profile"
-        android:icon="@drawable/profile" />
+        android:icon="@drawable/profile"
+        app:destination="@id/menuProfile"/>
 
     <item
         android:id="@+id/menu_Form"
         android:title="@string/form"
-        android:icon="@drawable/form" />
+        android:icon="@drawable/form"
+        app:destination="@id/menu_Form"/>
 
     <item
         android:id="@+id/menu_Food"
         android:title="@string/food"
-        android:icon="@drawable/foodlist" />
+        android:icon="@drawable/foodlist"
+        app:destination="@id/menu_Food"/>
 
     <item
         android:title="@string/others">
@@ -26,12 +31,14 @@
             <item
                 android:id="@+id/menu_Info"
                 android:title="@string/info"
-                android:icon="@drawable/info" />
+                android:icon="@drawable/info"
+                app:destination="@id/menu_Info"/>
 
             <item
                 android:id="@+id/menu_Feedback"
                 android:title="@string/feedback"
-                android:icon="@drawable/feedback" />
+                android:icon="@drawable/feedback"
+                app:destination="@id/menu_Feedback"/>
 
             <item
                 android:id="@+id/menu_Logout"

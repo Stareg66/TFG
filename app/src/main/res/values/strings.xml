@@ -21,4 +21,8 @@
     <string name="firstDayTab">Primer día</string>
     <string name="secondDayTab">Segundo día</string>
     <string name="thirdDayTab">Tercer día</string>
+    <string name="add">Añadir</string>
+    <string name="breakfast">Desayuno</string>
+    <string name="lunch">Almuerzo</string>
+    <string name="dinner">Cena</string>
 </resources>

@@ -8,7 +8,7 @@
         android:id="@+id/menu_MainPage"
         android:name="com.example.tfg.fragments.MainPageFragment"
         android:label="MainPage"
-        tools:layout="@layout/fragment_mainpage" />
+        tools:layout="@layout/fragment_mainpage"/>
     <fragment
         android:id="@+id/menuProfile"
         android:name="com.example.tfg.fragments.ProfileFragment"
