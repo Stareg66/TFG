@@ -25,4 +25,5 @@
     <string name="breakfast">Desayuno</string>
     <string name="lunch">Almuerzo</string>
     <string name="dinner">Cena</string>
+    <string name="quantityFood">Cantidad tomada (g/ml)</string>
 </resources>

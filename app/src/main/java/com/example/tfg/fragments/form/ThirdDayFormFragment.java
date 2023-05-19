@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class ThirdDayFormFragment extends Fragment {
 
@@ -157,13 +158,15 @@ public class ThirdDayFormFragment extends Fragment {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 if (documentSnapshot.exists()) {
-
-                    ArrayList<HashMap<String, Object>> selectedItemsList = (ArrayList<HashMap<String, Object>>) documentSnapshot.get("selectedItemsMorning3Day");
-                    if (selectedItemsList != null) {
+                    Map<String, Object> selectedItemsMap = (Map<String, Object>) documentSnapshot.get("selectedItemsMorning3Day");
+                    if (selectedItemsMap != null) {
                         List<Food> selectedItems = new ArrayList<>();
-                        for (HashMap<String, Object> foodMap : selectedItemsList) {
+                        for (Map.Entry<String, Object> entry : selectedItemsMap.entrySet()) {
+                            String foodId = entry.getKey();
+                            Map<String, Object> foodMap = (Map<String, Object>) entry.getValue();
+
                             Food food = new Food(
-                                    ((Long) foodMap.get("id")).intValue(),
+                                    Integer.parseInt(foodId),
                                     (String) foodMap.get("foodName")
                             );
                             selectedItems.add(food);
@@ -171,12 +174,15 @@ public class ThirdDayFormFragment extends Fragment {
                         selectedItemsAdapter.updateData(selectedItems);
                     }
 
-                    ArrayList<HashMap<String, Object>> selectedItemsListLu = (ArrayList<HashMap<String, Object>>) documentSnapshot.get("selectedItemsLunch3Day");
-                    if (selectedItemsListLu != null) {
+                    selectedItemsMap = (Map<String, Object>) documentSnapshot.get("selectedItemsLunch3Day");
+                    if (selectedItemsMap != null) {
                         List<Food> selectedItems = new ArrayList<>();
-                        for (HashMap<String, Object> foodMap : selectedItemsListLu) {
+                        for (Map.Entry<String, Object> entry : selectedItemsMap.entrySet()) {
+                            String foodId = entry.getKey();
+                            Map<String, Object> foodMap = (Map<String, Object>) entry.getValue();
+
                             Food food = new Food(
-                                    ((Long) foodMap.get("id")).intValue(),
+                                    Integer.parseInt(foodId),
                                     (String) foodMap.get("foodName")
                             );
                             selectedItems.add(food);
@@ -184,25 +190,27 @@ public class ThirdDayFormFragment extends Fragment {
                         selectedItemsAdapterLu.updateData(selectedItems);
                     }
 
-                    ArrayList<HashMap<String, Object>> selectedItemsListDi = (ArrayList<HashMap<String, Object>>) documentSnapshot.get("selectedItemsDinner3Day");
-                    if (selectedItemsListDi != null) {
+                    selectedItemsMap = (Map<String, Object>) documentSnapshot.get("selectedItemsDinner3Day");
+                    if (selectedItemsMap != null) {
                         List<Food> selectedItems = new ArrayList<>();
-                        for (HashMap<String, Object> foodMap : selectedItemsListDi) {
+                        for (Map.Entry<String, Object> entry : selectedItemsMap.entrySet()) {
+                            String foodId = entry.getKey();
+                            Map<String, Object> foodMap = (Map<String, Object>) entry.getValue();
+
                             Food food = new Food(
-                                    ((Long) foodMap.get("id")).intValue(),
+                                    Integer.parseInt(foodId),
                                     (String) foodMap.get("foodName")
                             );
                             selectedItems.add(food);
                         }
                         selectedItemsAdapterDi.updateData(selectedItems);
                     }
-
                 }
             }
         });
     }
 
-    private void addSelectedItemToLayout(Food food, String time) {
+    private void addSelectedItemToLayout(Food food, String time, int quantity) {
         boolean isItemAlreadySelected = false;
         switch(time){
             case "breakfast":
@@ -215,7 +223,7 @@ public class ThirdDayFormFragment extends Fragment {
 
                 if (!isItemAlreadySelected) {
                     selectedItemsList.add(food);
-                    addSelectedItemToFirestore(food, time);
+                    addSelectedItemToFirestore(food, time, quantity);
                     selectedItemsAdapter.updateData(selectedItemsList);
                 } else {
                     Toast.makeText(requireContext(), "Ya ha añadido esa comida", Toast.LENGTH_SHORT).show();
@@ -231,7 +239,7 @@ public class ThirdDayFormFragment extends Fragment {
 
                 if (!isItemAlreadySelected) {
                     selectedItemsListLu.add(food);
-                    addSelectedItemToFirestore(food, time);
+                    addSelectedItemToFirestore(food, time, quantity);
                     selectedItemsAdapterLu.updateData(selectedItemsListLu);
                 } else {
                     Toast.makeText(requireContext(), "Ya ha añadido esa comida", Toast.LENGTH_SHORT).show();
@@ -247,7 +255,7 @@ public class ThirdDayFormFragment extends Fragment {
 
                 if (!isItemAlreadySelected) {
                     selectedItemsListDi.add(food);
-                    addSelectedItemToFirestore(food, time);
+                    addSelectedItemToFirestore(food, time, quantity);
                     selectedItemsAdapterDi.updateData(selectedItemsListDi);
                 } else {
                     Toast.makeText(requireContext(), "Ya ha añadido esa comida", Toast.LENGTH_SHORT).show();
@@ -257,16 +265,22 @@ public class ThirdDayFormFragment extends Fragment {
 
     }
 
-    private void addSelectedItemToFirestore(Food food, String time) {
-        switch(time){
+
+    private void addSelectedItemToFirestore(Food food, String time, int quantity) {
+        Map<String, Object> foodMap = new HashMap<>();
+        foodMap.put("foodId", food.getId());
+        foodMap.put("foodName", food.getFoodName());
+        foodMap.put("amountInMg", quantity);
+
+        switch (time) {
             case "breakfast":
-                userRef.update("selectedItemsMorning3Day", FieldValue.arrayUnion(food));
+                userRef.update("selectedItemsMorning3Day." + food.getId(), foodMap);
                 break;
             case "lunch":
-                userRef.update("selectedItemsLunch3Day", FieldValue.arrayUnion(food));
+                userRef.update("selectedItemsLunch3Day." + food.getId(), foodMap);
                 break;
             case "dinner":
-                userRef.update("selectedItemsDinner3Day", FieldValue.arrayUnion(food));
+                userRef.update("selectedItemsDinner3Day." + food.getId(), foodMap);
                 break;
         }
     }
@@ -308,14 +322,38 @@ public class ThirdDayFormFragment extends Fragment {
         popupWindow.setFocusable(true);
         popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
 
+        View quantityView = LayoutInflater.from(requireContext()).inflate(R.layout.food_inlist_popup_confirmation, null);
+        Button acceptQuantity = quantityView.findViewById(R.id.acceptQuantity);
+        Button denyQuantity = quantityView.findViewById(R.id.denyQuantity);
+        EditText quantity = quantityView.findViewById(R.id.quantityTaken);
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Food selectedFood = (Food) parent.getItemAtPosition(position);
-                addSelectedItemToLayout(selectedFood, time);
+                PopupWindow popupWindowQuantity = new PopupWindow(quantityView, 750, 750, true);
+                popupWindowQuantity.setBackgroundDrawable(new ColorDrawable(Color.DKGRAY));
+                popupWindowQuantity.setOutsideTouchable(false);
+                popupWindowQuantity.setFocusable(true);
+                popupWindowQuantity.showAtLocation(quantityView, Gravity.CENTER, 0, 0);
+                acceptQuantity.setOnClickListener(new View.OnClickListener(){
 
-                // Dismiss the popup window after selecting an item
-                popupWindow.dismiss();
+                    @Override
+                    public void onClick(View view) {
+                        Food selectedFood = (Food) parent.getItemAtPosition(position);
+                        addSelectedItemToLayout(selectedFood, time, Integer.parseInt(quantity.getText().toString()));
+                        popupWindowQuantity.dismiss();
+                        popupWindow.dismiss();
+                    }
+
+                });
+
+                denyQuantity.setOnClickListener(new View.OnClickListener(){
+
+                    @Override
+                    public void onClick(View view) {
+                        popupWindowQuantity.dismiss();
+                    }
+                });
             }
         });
 
