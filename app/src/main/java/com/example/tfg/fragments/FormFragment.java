@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import com.example.tfg.R;
 import com.example.tfg.fragments.form.FirstDayFormFragment;
+import com.example.tfg.fragments.form.QuantityFormFragment;
 import com.example.tfg.fragments.form.SecondDayFormFragment;
 import com.example.tfg.fragments.form.ThirdDayFormFragment;
 import com.example.tfg.fragments.form.ViewPagerAdapter;
@@ -68,6 +69,7 @@ public class FormFragment extends Fragment {
         vpAdapter.addFragment(new FirstDayFormFragment(),"Primer día");
         vpAdapter.addFragment(new SecondDayFormFragment(),"Segundo día");
         vpAdapter.addFragment(new ThirdDayFormFragment(),"Tercer día");
+        vpAdapter.addFragment(new QuantityFormFragment(), "Frecuencia consumo");
 
         viewPager.setAdapter(vpAdapter);
     }

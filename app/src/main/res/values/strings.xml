@@ -26,4 +26,5 @@
     <string name="lunch">Almuerzo</string>
     <string name="dinner">Cena</string>
     <string name="quantityFood">Cantidad tomada (g/ml)</string>
+    <string name="frecuencia_de_consumo">Frecuencia de consumo</string>
 </resources>

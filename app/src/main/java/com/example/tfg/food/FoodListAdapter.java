@@ -28,14 +28,6 @@ public class FoodListAdapter extends BaseAdapter implements Filterable {
     private int currentPage = 0;
     private Filter foodFilter;
 
-    /*
-    public FoodListAdapter(@NonNull Context context, int pageSize, @NonNull List<Food> foods) {
-        inflater = LayoutInflater.from(context);
-        this.pageSize = pageSize;
-        this.foods = foods;
-        this.filteredFoods = new ArrayList<>(foods);
-        this.foodFilter = new FoodFilter();
-    }*/
     public FoodListAdapter(@NonNull Context context, int pageSize, @NonNull List<Food> foods) {
         inflater = LayoutInflater.from(context);
         this.pageSize = pageSize;
@@ -43,15 +35,6 @@ public class FoodListAdapter extends BaseAdapter implements Filterable {
         this.filteredFoods = new ArrayList<>(foods);
         this.foodFilter = new FoodFilter();
     }
-
-    /*
-    public void updateData(Food[] newFoods){
-        foods.clear();
-        filteredFoods.clear();
-        foods.addAll(Arrays.asList(newFoods));
-        filteredFoods.addAll(Arrays.asList(newFoods));
-        notifyDataSetChanged();
-    }*/
 
     public void updateData(List<Food> newFoods) {
         foods.clear();
@@ -95,23 +78,6 @@ public class FoodListAdapter extends BaseAdapter implements Filterable {
     public Filter getFilter() {
         return foodFilter;
     }
-    /*
-    @NonNull
-    @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-
-        if (convertView == null){
-            convertView = inflater.inflate(R.layout.food_inlist, parent, false);
-        }
-
-        TextView foodNameTextView = convertView.findViewById(R.id.foodName_inList);
-        //TextView foodCaloriesTextView = convertView.findViewById(R.id.foodCalories_inList);
-
-        Food food = getItem(position);
-        foodNameTextView.setText(food.getFoodName());
-        //foodCaloriesTextView.setText(String.valueOf(food.getKcal()));
-        return convertView;
-    }*/
 
     @NonNull
     @Override
