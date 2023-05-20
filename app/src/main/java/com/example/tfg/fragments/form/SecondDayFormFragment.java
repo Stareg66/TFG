@@ -287,13 +287,64 @@ public class SecondDayFormFragment extends Fragment {
     private void deleteSelectedItemToFirestore(Food food, String time) {
         switch(time){
             case "breakfast":
-                userRef.update("selectedItemsMorning2Day", FieldValue.arrayRemove(food));
+                userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            Map<String, Object> foodList = (Map<String, Object>) documentSnapshot.get("selectedItemsMorning2Day");
+                            if (foodList != null && foodList.containsKey(String.valueOf(food.getId()))) {
+                                foodList.remove(String.valueOf(food.getId()));
+                                userRef.update("selectedItemsMorning2Day", foodList)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void unused) {
+                                                selectedItemsList.remove(food);
+                                            }
+                                        });
+                            }
+                        }
+                    }
+                });
                 break;
             case "lunch":
-                userRef.update("selectedItemsLunch2Day", FieldValue.arrayRemove(food));
+                userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            Map<String, Object> foodList = (Map<String, Object>) documentSnapshot.get("selectedItemsLunch2Day");
+                            if (foodList != null && foodList.containsKey(String.valueOf(food.getId()))) {
+                                foodList.remove(String.valueOf(food.getId()));
+                                userRef.update("selectedItemsLunch2Day", foodList)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void unused) {
+                                                selectedItemsList.remove(food);
+                                            }
+                                        });
+                            }
+                        }
+                    }
+                });
                 break;
             case "dinner":
-                userRef.update("selectedItemsDinner2Day", FieldValue.arrayRemove(food));
+                userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            Map<String, Object> foodList = (Map<String, Object>) documentSnapshot.get("selectedItemsDinner2Day");
+                            if (foodList != null && foodList.containsKey(String.valueOf(food.getId()))) {
+                                foodList.remove(String.valueOf(food.getId()));
+                                userRef.update("selectedItemsDinner2Day", foodList)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void unused) {
+                                                selectedItemsList.remove(food);
+                                            }
+                                        });
+                            }
+                        }
+                    }
+                });
                 break;
         }
     }

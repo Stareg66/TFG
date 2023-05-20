@@ -94,23 +94,24 @@ public class QuantityFormFragment extends Fragment {
                 Button buttonChangeFrequency = frequencyView.findViewById(R.id.buttonChangeFrequency);
                 Button deleteFoodFrequency = frequencyView.findViewById(R.id.deleteFoodFrequency);
 
+                foodNameDetailed.setText(selectedItem.getFoodName());
+
                 userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         if (documentSnapshot.exists()) {
                             Map<String, Object> frequencyList = (Map<String, Object>) documentSnapshot.getData().get("frequencyList");
 
-                            if (frequencyList != null) {
-                                int frequency = 0; // Default frequency if not found
+                            if (frequencyList != null){
+                                int frequency = 0;
 
-                                if (frequencyList.containsKey(selectedItem.getId())) {
-                                    Map<String, Object> foodMap = (Map<String, Object>) frequencyList.get(selectedItem.getId());
+                                if (frequencyList.containsKey(String.valueOf(selectedItem.getId()))) {
+                                    Map<String, Object> foodMap = (Map<String, Object>) frequencyList.get(String.valueOf(selectedItem.getId()));
                                     frequency = ((Long) foodMap.get("frequency")).intValue();
-                                    foodNameDetailed.setText(selectedItem.getFoodName());
-                                    frequencyDetailed.setText(frequency);
                                 }
 
-
+                                foodNameDetailed.setText(selectedItem.getFoodName());
+                                frequencyDetailed.setText(String.valueOf(frequency));
                             }
                         }
                     }
@@ -120,11 +121,11 @@ public class QuantityFormFragment extends Fragment {
                     @Override
                     public void onClick(View view) {
                         View frequencyChange = LayoutInflater.from(requireContext()).inflate(R.layout.food_inlist_popup_frequency, null);
-                        PopupWindow popupWindow = new PopupWindow(frequencyChange, 1000, 1000, true);
-                        popupWindow.setBackgroundDrawable(new ColorDrawable(Color.DKGRAY));
-                        popupWindow.setOutsideTouchable(true);
-                        popupWindow.setFocusable(true);
-                        popupWindow.showAtLocation(frequencyChange, Gravity.CENTER, 0, 0);
+                        PopupWindow popupWindowModify = new PopupWindow(frequencyChange, 1000, 1000, true);
+                        popupWindowModify.setBackgroundDrawable(new ColorDrawable(Color.DKGRAY));
+                        popupWindowModify.setOutsideTouchable(true);
+                        popupWindowModify.setFocusable(true);
+                        popupWindowModify.showAtLocation(frequencyChange, Gravity.CENTER, 0, 0);
 
                         TextView frequencyDetailed = frequencyChange.findViewById(R.id.frequencyNumber);
                         Button acceptFrequency = frequencyChange.findViewById(R.id.acceptFrequency);
@@ -140,12 +141,12 @@ public class QuantityFormFragment extends Fragment {
                                         @Override
                                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                                             if (documentSnapshot.exists()) {
-                                                Map<String, Object> frequencyList = documentSnapshot.toObject(Map.class);
+                                                Map<String, Object> frequencyList = (Map<String, Object>) documentSnapshot.get("frequencyList");
                                                 if (frequencyList != null) {
-                                                    Map<String, Object> foodMap = (Map<String, Object>) frequencyList.get("frequencyList");
+                                                    Map<String, Object> foodMap = (Map<String, Object>) frequencyList.get(String.valueOf(selectedFood.getId()));
                                                     if (foodMap != null) {
-                                                        foodMap.put(String.valueOf(selectedFood.getId()), Integer.parseInt(frequencyDetailed.getText().toString()));
-                                                        userRef.update("frequencyList", foodMap);
+                                                        foodMap.put("frequency", Integer.parseInt(frequencyDetailed.getText().toString()));
+                                                        userRef.update("frequencyList." + selectedFood.getId(), foodMap);
                                                     }
                                                 }
                                             }
@@ -154,6 +155,7 @@ public class QuantityFormFragment extends Fragment {
                                 }
 
                                 addSelectedItemToLayout(selectedFood, Integer.parseInt(frequencyDetailed.getText().toString()));
+                                popupWindowModify.dismiss();
                                 popupWindow.dismiss();
                             }
                         });
@@ -162,6 +164,7 @@ public class QuantityFormFragment extends Fragment {
 
                             @Override
                             public void onClick(View view) {
+                                popupWindowModify.dismiss();
                                 popupWindow.dismiss();
                             }
                         });
@@ -172,9 +175,8 @@ public class QuantityFormFragment extends Fragment {
                 deleteFoodFrequency.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        selectedItemsList.remove(selectedItem);
                         deleteSelectedItemToFirestore(selectedItem);
-                        selectedItemsAdapter.updateData(selectedItemsList);
+                        popupWindow.dismiss();
                     }
                 });
             }
@@ -183,6 +185,34 @@ public class QuantityFormFragment extends Fragment {
         return view;
     }
 
+    private void fetchSelectedItemsFromFirestore() {
+        userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+                    Object frequencyListObj = documentSnapshot.get("frequencyList");
+                    if (frequencyListObj != null) {
+                        List<Food> selectedItems = new ArrayList<>();
+                        Map<String, Object> selectedItemsMap = (Map<String, Object>) frequencyListObj;
+                        for (Map.Entry<String, Object> entry : selectedItemsMap.entrySet()) {
+                            String foodId = entry.getKey();
+                            Map<String, Object> foodMap = (Map<String, Object>) entry.getValue();
+
+                            Food food = new Food(
+                                    Integer.parseInt(foodId),
+                                    (String) foodMap.get("foodName")
+                            );
+                            selectedItems.add(food);
+                        }
+
+                        selectedItemsAdapter.updateData(selectedItems);
+                    }
+                }
+            }
+        });
+    }
+
+    /*
     private void fetchSelectedItemsFromFirestore() {
         userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -206,7 +236,7 @@ public class QuantityFormFragment extends Fragment {
                 }
             }
         });
-    }
+    }*/
 
     private void showPopupListView() {
         View popupView = LayoutInflater.from(requireContext()).inflate(R.layout.food_inlist_popup, null);
@@ -279,6 +309,7 @@ public class QuantityFormFragment extends Fragment {
         if (!isItemAlreadySelected) {
             selectedItemsList.add(food);
             addSelectedItemToFirestore(food, frequency);
+            fetchSelectedItemsFromFirestore();
             selectedItemsAdapter.updateData(selectedItemsList);
         } else {
             Toast.makeText(requireContext(), "Ya ha añadido esa comida", Toast.LENGTH_SHORT).show();
@@ -293,9 +324,32 @@ public class QuantityFormFragment extends Fragment {
         userRef.update("frequencyList." + food.getId(), foodMap);
     }
 
+    private void deleteSelectedItemToFirestore(Food food) {
+        userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+                    Map<String, Object> frequencyList = (Map<String, Object>) documentSnapshot.get("frequencyList");
+                    if (frequencyList != null && frequencyList.containsKey(String.valueOf(food.getId()))) {
+                        frequencyList.remove(String.valueOf(food.getId()));
+                        userRef.update("frequencyList", frequencyList)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+                                        selectedItemsList.remove(food);
+                                        fetchSelectedItemsFromFirestore();
+                                    }
+                                });
+                    }
+                }
+            }
+        });
+    }
+
+    /*
     private void deleteSelectedItemToFirestore(Food food){
         userRef.update("frequencyList", FieldValue.arrayRemove(food));
-    }
+    }*/
 
     private void fetchSearchResults(String query, FoodListAdapter adapter) {
         String apiUrl = "https://sanger.dia.fi.upm.es/foodnorm/foods/" + query;

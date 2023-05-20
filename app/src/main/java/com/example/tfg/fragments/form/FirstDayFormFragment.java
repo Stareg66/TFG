@@ -33,16 +33,12 @@ import com.example.tfg.R;
 import com.example.tfg.food.Food;
 import com.example.tfg.food.FoodListAdapter;
 import com.example.tfg.food.FoodListConnection;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.auth.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -303,13 +299,64 @@ public class FirstDayFormFragment extends Fragment {
     private void deleteSelectedItemToFirestore(Food food, String time) {
         switch(time){
             case "breakfast":
-                userRef.update("selectedItemsMorning1Day", FieldValue.arrayRemove(food));
+                userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            Map<String, Object> foodList = (Map<String, Object>) documentSnapshot.get("selectedItemsMorning1Day");
+                            if (foodList != null && foodList.containsKey(String.valueOf(food.getId()))) {
+                                foodList.remove(String.valueOf(food.getId()));
+                                userRef.update("selectedItemsMorning1Day", foodList)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void unused) {
+                                                selectedItemsList.remove(food);
+                                            }
+                                        });
+                            }
+                        }
+                    }
+                });
                 break;
             case "lunch":
-                userRef.update("selectedItemsLunch1Day", FieldValue.arrayRemove(food));
+                userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            Map<String, Object> foodList = (Map<String, Object>) documentSnapshot.get("selectedItemsLunch1Day");
+                            if (foodList != null && foodList.containsKey(String.valueOf(food.getId()))) {
+                                foodList.remove(String.valueOf(food.getId()));
+                                userRef.update("selectedItemsLunch1Day", foodList)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void unused) {
+                                                selectedItemsList.remove(food);
+                                            }
+                                        });
+                            }
+                        }
+                    }
+                });
                 break;
             case "dinner":
-                userRef.update("selectedItemsDinner1Day", FieldValue.arrayRemove(food));
+                userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            Map<String, Object> foodList = (Map<String, Object>) documentSnapshot.get("selectedItemsDinner1Day");
+                            if (foodList != null && foodList.containsKey(String.valueOf(food.getId()))) {
+                                foodList.remove(String.valueOf(food.getId()));
+                                userRef.update("selectedItemsDinner1Day", foodList)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void unused) {
+                                                selectedItemsList.remove(food);
+                                            }
+                                        });
+                            }
+                        }
+                    }
+                });
                 break;
         }
     }

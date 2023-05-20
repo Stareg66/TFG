@@ -288,13 +288,64 @@ public class ThirdDayFormFragment extends Fragment {
     private void deleteSelectedItemToFirestore(Food food, String time) {
         switch(time){
             case "breakfast":
-                userRef.update("selectedItemsMorning3Day", FieldValue.arrayRemove(food));
+                userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            Map<String, Object> foodList = (Map<String, Object>) documentSnapshot.get("selectedItemsMorning3Day");
+                            if (foodList != null && foodList.containsKey(String.valueOf(food.getId()))) {
+                                foodList.remove(String.valueOf(food.getId()));
+                                userRef.update("selectedItemsMorning3Day", foodList)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void unused) {
+                                                selectedItemsList.remove(food);
+                                            }
+                                        });
+                            }
+                        }
+                    }
+                });
                 break;
             case "lunch":
-                userRef.update("selectedItemsLunch3Day", FieldValue.arrayRemove(food));
+                userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            Map<String, Object> foodList = (Map<String, Object>) documentSnapshot.get("selectedItemsLunch3Day");
+                            if (foodList != null && foodList.containsKey(String.valueOf(food.getId()))) {
+                                foodList.remove(String.valueOf(food.getId()));
+                                userRef.update("selectedItemsLunch3Day", foodList)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void unused) {
+                                                selectedItemsList.remove(food);
+                                            }
+                                        });
+                            }
+                        }
+                    }
+                });
                 break;
             case "dinner":
-                userRef.update("selectedItemsDinner3Day", FieldValue.arrayRemove(food));
+                userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            Map<String, Object> foodList = (Map<String, Object>) documentSnapshot.get("selectedItemsDinner3Day");
+                            if (foodList != null && foodList.containsKey(String.valueOf(food.getId()))) {
+                                foodList.remove(String.valueOf(food.getId()));
+                                userRef.update("selectedItemsDinner3Day", foodList)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void unused) {
+                                                selectedItemsList.remove(food);
+                                            }
+                                        });
+                            }
+                        }
+                    }
+                });
                 break;
         }
     }
