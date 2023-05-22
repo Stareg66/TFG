@@ -51,6 +51,7 @@ public class FoodListConnection extends AsyncTask<String, Void, Food[]>{
                     }
                     reader.close();
                     Gson gson = new Gson();
+                    System.out.println(result.toString());
                     return gson.fromJson(result.toString(), Food[].class);
                 }
             } catch (Exception e) {
@@ -61,7 +62,6 @@ public class FoodListConnection extends AsyncTask<String, Void, Food[]>{
 
         protected void onPostExecute(Food[] result){
             super.onPostExecute(result);
-
             FoodListAdapter adapter = adapterWeakReference.get();
             if(result != null){
                 adapter.updateData(Arrays.asList(result));

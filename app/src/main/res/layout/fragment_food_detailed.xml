@@ -7,30 +7,370 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:padding="16dp">
-
-        <TextView
-            android:id="@+id/food_name_textview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="28sp"
-            android:textStyle="bold"
-            android:text="Food:"
-            android:layout_marginTop="16dp"
-            android:layout_marginStart="16dp"/>
 
         <TextView
             android:id="@+id/foodName_detailed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="28sp"
+            android:textSize="19sp"
             android:textStyle="bold"
-            android:layout_toEndOf="@+id/food_name_textview"
+            android:layout_marginTop="16dp"
             android:text="Food Name"
-            android:layout_alignTop="@+id/food_name_textview"
+            android:layout_marginStart="16dp" />
+
+        <TextView
+            android:id="@+id/food_protein_detailed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:text="Proteina:"
+            android:layout_below="@+id/foodName_detailed"
+            android:layout_marginTop="12dp"
+            android:layout_marginStart="16dp"/>
+
+        <TextView
+            android:id="@+id/foodProtein_detailed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:layout_toEndOf="@+id/food_protein_detailed"
+            android:text="Protein number"
+            android:layout_alignTop="@+id/food_protein_detailed"
+            android:layout_marginStart="8dp"/>
+
+        <TextView
+            android:id="@+id/food_carbs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:text="Carbohidratos:"
+            android:layout_below="@+id/food_protein_detailed"
+            android:layout_marginTop="12dp"
+            android:layout_marginStart="16dp"/>
+
+        <TextView
+            android:id="@+id/foodcarbs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:layout_toEndOf="@+id/food_carbs"
+            android:text="Carbs number"
+            android:layout_alignTop="@+id/food_carbs"
+            android:layout_marginStart="8dp"/>
+
+        <TextView
+            android:id="@+id/food_fiber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:text="Fibra:"
+            android:layout_below="@+id/food_carbs"
+            android:layout_marginTop="12dp"
+            android:layout_marginStart="16dp"/>
+
+        <TextView
+            android:id="@+id/foodfiber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:layout_toEndOf="@+id/food_fiber"
+            android:text="Fiber number"
+            android:layout_alignTop="@+id/food_fiber"
+            android:layout_marginStart="8dp"/>
+
+        <TextView
+            android:id="@+id/food_sugar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:text="Azucares:"
+            android:layout_below="@+id/food_fiber"
+            android:layout_marginTop="12dp"
+            android:layout_marginStart="16dp"/>
+
+        <TextView
+            android:id="@+id/foodsugar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:layout_toEndOf="@+id/food_sugar"
+            android:text="Sugar number"
+            android:layout_alignTop="@+id/food_sugar"
+            android:layout_marginStart="8dp"/>
+
+        <TextView
+            android:id="@+id/food_coles"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:text="Colesterol:"
+            android:layout_below="@+id/food_sugar"
+            android:layout_marginTop="12dp"
+            android:layout_marginStart="16dp"/>
+
+        <TextView
+            android:id="@+id/foodcolesterol"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:layout_toEndOf="@+id/food_coles"
+            android:text="Colesterol number"
+            android:layout_alignTop="@+id/food_coles"
+            android:layout_marginStart="8dp"/>
+
+        <TextView
+            android:id="@+id/food_sodio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:text="Sodio:"
+            android:layout_below="@+id/food_coles"
+            android:layout_marginTop="12dp"
+            android:layout_marginStart="16dp"/>
+
+        <TextView
+            android:id="@+id/foodsodio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:layout_toEndOf="@+id/food_sodio"
+            android:text="Sodio number"
+            android:layout_alignTop="@+id/food_sodio"
+            android:layout_marginStart="8dp"/>
+
+        <TextView
+            android:id="@+id/food_potasio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:text="Potasio:"
+            android:layout_below="@+id/food_sodio"
+            android:layout_marginTop="12dp"
+            android:layout_marginStart="16dp"/>
+
+        <TextView
+            android:id="@+id/foodpotasio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:layout_toEndOf="@+id/food_potasio"
+            android:text="Potasio number"
+            android:layout_alignTop="@+id/food_potasio"
+            android:layout_marginStart="8dp"/>
+
+        <TextView
+            android:id="@+id/food_vitaminaa"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:text="Vitamina A:"
+            android:layout_below="@+id/food_potasio"
+            android:layout_marginTop="12dp"
+            android:layout_marginStart="16dp"/>
+
+        <TextView
+            android:id="@+id/foodvitaminaa"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:layout_toEndOf="@+id/food_vitaminaa"
+            android:text="Vitamina A number"
+            android:layout_alignTop="@+id/food_vitaminaa"
+            android:layout_marginStart="8dp"/>
+
+        <TextView
+            android:id="@+id/food_vitaminac"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:text="Vitamina C:"
+            android:layout_below="@+id/food_vitaminaa"
+            android:layout_marginTop="12dp"
+            android:layout_marginStart="16dp"/>
+
+        <TextView
+            android:id="@+id/foodvitaminac"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:layout_toEndOf="@+id/food_vitaminac"
+            android:text="Vitamina A number"
+            android:layout_alignTop="@+id/food_vitaminac"
+            android:layout_marginStart="8dp"/>
+
+        <TextView
+            android:id="@+id/food_calcio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:text="Calcio:"
+            android:layout_below="@+id/food_vitaminac"
+            android:layout_marginTop="12dp"
+            android:layout_marginStart="16dp"/>
+
+        <TextView
+            android:id="@+id/foodcalcio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:layout_toEndOf="@+id/food_calcio"
+            android:text="Calcio A number"
+            android:layout_alignTop="@+id/food_calcio"
+            android:layout_marginStart="8dp"/>
+
+        <TextView
+            android:id="@+id/food_hierro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:text="Hierro:"
+            android:layout_below="@+id/food_calcio"
+            android:layout_marginTop="12dp"
+            android:layout_marginStart="16dp"/>
+
+        <TextView
+            android:id="@+id/foodhierro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:layout_toEndOf="@+id/food_hierro"
+            android:text="Hierro number"
+            android:layout_alignTop="@+id/food_hierro"
+            android:layout_marginStart="8dp"/>
+
+        <TextView
+            android:id="@+id/food_grasa"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:text="Grasa:"
+            android:layout_below="@+id/food_hierro"
+            android:layout_marginTop="12dp"
+            android:layout_marginStart="16dp"/>
+
+        <TextView
+            android:id="@+id/foodgrasa"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:layout_toEndOf="@+id/food_grasa"
+            android:text="Fat number"
+            android:layout_alignTop="@+id/food_grasa"
+            android:layout_marginStart="8dp"/>
+
+
+
+
+        <TextView
+            android:id="@+id/ag_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:text="Ácidos grasos"
+            android:layout_below="@+id/food_grasa"
+            android:layout_marginTop="35dp"
+            android:layout_marginStart="16dp"/>
+
+        <TextView
+            android:id="@+id/ag_satu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:text="Saturados:"
+            android:layout_below="@+id/ag_label"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="50dp"/>
+
+        <TextView
+            android:id="@+id/agsatu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:layout_toEndOf="@+id/ag_satu"
+            android:text="Ag satu number"
+            android:layout_alignTop="@+id/ag_satu"
+            android:layout_marginStart="8dp"/>
+
+        <TextView
+            android:id="@+id/ag_poli"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:text="Poliinsaturados:"
+            android:layout_below="@+id/ag_satu"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="50dp"/>
+
+        <TextView
+            android:id="@+id/agpoli"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:layout_toEndOf="@+id/ag_poli"
+            android:text="Ag poli number"
+            android:layout_alignTop="@+id/ag_poli"
+            android:layout_marginStart="8dp"/>
+
+        <TextView
+            android:id="@+id/ag_mono"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:text="Monoinsaturados:"
+            android:layout_below="@+id/ag_poli"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="50dp"/>
+
+        <TextView
+            android:id="@+id/agmono"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:layout_toEndOf="@+id/ag_mono"
+            android:text="Ag mono number"
+            android:layout_alignTop="@+id/ag_mono"
+            android:layout_marginStart="8dp"/>
+
+        <TextView
+            android:id="@+id/ag_trans"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:text="Trans:"
+            android:layout_below="@+id/ag_mono"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="50dp"/>
+
+        <TextView
+            android:id="@+id/agtrans"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:layout_toEndOf="@+id/ag_trans"
+            android:text="Ag trans number"
+            android:layout_alignTop="@+id/ag_trans"
             android:layout_marginStart="8dp"/>
 
     </RelativeLayout>
+
 
 </FrameLayout>

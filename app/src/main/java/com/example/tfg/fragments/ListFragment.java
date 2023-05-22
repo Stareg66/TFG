@@ -93,10 +93,27 @@ public class ListFragment extends Fragment {
                 Food food = adapter.getItem(position);
                 String foodName = food.getFoodName();
 
-                // Create the detail fragment and add it to the activity
+                Double protein = checkNull(food.getMicronutrientes().getProteina_total());
+                Double carbos = checkNull(food.getMicronutrientes().getCarbohidratos());
+                Double fibra = checkNull(food.getMicronutrientes().getFibra_total());
+                Double azucar = checkNull(food.getMicronutrientes().getAzucares_totales());
+                Double grasas = checkNull(food.getMicronutrientes().getGrasa_total());
+                Double agsat = checkNull(food.getMicronutrientes().getAg_saturados_total());
+                Double agpoli = checkNull(food.getMicronutrientes().getAg_poliinsaturados_total());
+                Double agmono = checkNull(food.getMicronutrientes().getAg_monoinsaturados_total());
+                Double agtrans = checkNull(food.getMicronutrientes().getAg_trans_total());
+                Double coles = checkNull(food.getMicronutrientes().getColesterol());
+                Double sodio = checkNull(food.getMicronutrientes().getSodio());
+                Double potasio = checkNull(food.getMicronutrientes().getPotasio());
+                Double vitaminaa = checkNull(food.getMicronutrientes().getVitamina_a());
+                Double vitaminac = checkNull(food.getMicronutrientes().getVitamina_c());
+                Double calcio = checkNull(food.getMicronutrientes().getCalcio());
+                Double hierro = checkNull(food.getMicronutrientes().getHierro_total());
+
                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                 fragmentManager.beginTransaction()
-                        .replace(R.id.nav_host_fragment, FoodDetailedFragment.newInstance(foodName))//, foodCalories))
+                        .replace(R.id.nav_host_fragment, FoodDetailedFragment.newInstance(foodName, protein, carbos, fibra, azucar, grasas, agsat, agpoli, agmono, agtrans, coles,
+                                sodio, potasio, vitaminaa, vitaminac, calcio, hierro))
                         .addToBackStack(null)
                         .commit();
             }
@@ -125,4 +142,11 @@ public class ListFragment extends Fragment {
         return adapter;
     }
 
+    public Double checkNull(Double nutrient){
+        if(nutrient == null){
+            return 0.0;
+        } else {
+            return nutrient;
+        }
+    }
 }

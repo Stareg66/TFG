@@ -95,7 +95,6 @@ public class FoodListAdapter extends BaseAdapter implements Filterable {
 
         Food food = getItem(position);
         holder.foodNameTextView.setText(food.getFoodName());
-
         return convertView;
     }
 
@@ -140,6 +139,5 @@ public class FoodListAdapter extends BaseAdapter implements Filterable {
         currentPage = 0;
         notifyDataSetChanged();
     }
-
 
 }

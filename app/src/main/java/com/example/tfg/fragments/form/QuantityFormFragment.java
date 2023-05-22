@@ -22,6 +22,7 @@ import com.example.tfg.R;
 import com.example.tfg.food.Food;
 import com.example.tfg.food.FoodListAdapter;
 import com.example.tfg.food.FoodListConnection;
+import com.example.tfg.food.Micronutrients;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -198,9 +199,19 @@ public class QuantityFormFragment extends Fragment {
                             String foodId = entry.getKey();
                             Map<String, Object> foodMap = (Map<String, Object>) entry.getValue();
 
+                            Map<String, Double> micronutrientMap = (Map<String, Double>) foodMap.get("micronutrientes");
+
+                            Micronutrients micronutrients = new Micronutrients(micronutrientMap.get("proteina_total"), micronutrientMap.get("carbohidratos"),
+                                    micronutrientMap.get("fibra_total"),micronutrientMap.get("azucares_totales"),micronutrientMap.get("grasa_total"),
+                                    micronutrientMap.get("ag_saturados_total"),micronutrientMap.get("ag_poliinsaturados_total"),micronutrientMap.get("ag_monoinsaturados_total"),
+                                    micronutrientMap.get("ag_trans_total"),micronutrientMap.get("colesterol"),micronutrientMap.get("sodio"),
+                                    micronutrientMap.get("potasio"),micronutrientMap.get("vitamina_a"),micronutrientMap.get("vitamina_c"),
+                                    micronutrientMap.get("calcio"),micronutrientMap.get("hierro_total"));
+
                             Food food = new Food(
                                     Integer.parseInt(foodId),
-                                    (String) foodMap.get("foodName")
+                                    (String) foodMap.get("foodName"),
+                                    micronutrients
                             );
                             selectedItems.add(food);
                         }
@@ -320,6 +331,26 @@ public class QuantityFormFragment extends Fragment {
         Map<String, Object> foodMap = new HashMap<>();
         foodMap.put("foodId", food.getId());
         foodMap.put("foodName", food.getFoodName());
+
+        Map<String, Double> micronutrientMap = new HashMap<>();
+        micronutrientMap.put("proteina_total",food.getMicronutrientes().getProteina_total());
+        micronutrientMap.put("carbohidratos",food.getMicronutrientes().getCarbohidratos());
+        micronutrientMap.put("fibra_total",food.getMicronutrientes().getFibra_total());
+        micronutrientMap.put("azucares_totales",food.getMicronutrientes().getAzucares_totales());
+        micronutrientMap.put("grasa_total",food.getMicronutrientes().getGrasa_total());
+        micronutrientMap.put("ag_saturados_total",food.getMicronutrientes().getAg_saturados_total());
+        micronutrientMap.put("ag_poliinsaturados_total",food.getMicronutrientes().getAg_poliinsaturados_total());
+        micronutrientMap.put("ag_monoinsaturados_total",food.getMicronutrientes().getAg_monoinsaturados_total());
+        micronutrientMap.put("ag_trans_total",food.getMicronutrientes().getAg_trans_total());
+        micronutrientMap.put("colesterol",food.getMicronutrientes().getColesterol());
+        micronutrientMap.put("sodio",food.getMicronutrientes().getSodio());
+        micronutrientMap.put("potasio",food.getMicronutrientes().getPotasio());
+        micronutrientMap.put("vitamina_a",food.getMicronutrientes().getVitamina_a());
+        micronutrientMap.put("vitamina_c",food.getMicronutrientes().getVitamina_c());
+        micronutrientMap.put("calcio",food.getMicronutrientes().getCalcio());
+        micronutrientMap.put("hierro_total",food.getMicronutrientes().getHierro_total());
+
+        foodMap.put("micronutrientes", micronutrientMap);
         foodMap.put("frequency", frequency);
         userRef.update("frequencyList." + food.getId(), foodMap);
     }
