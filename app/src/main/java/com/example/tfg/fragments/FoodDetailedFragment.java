@@ -19,6 +19,7 @@ import com.example.tfg.R;
 public class FoodDetailedFragment extends Fragment {
 
     private TextView mFoodName;
+    private TextView category;
     private TextView proteina;
     private TextView carbos;
     private TextView fibra;
@@ -41,11 +42,12 @@ public class FoodDetailedFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static FoodDetailedFragment newInstance(String foodName, Double protein, Double carbos, Double fibra, Double azucar, Double grasas, Double agsat, Double agpoli, Double agmono,
+    public static FoodDetailedFragment newInstance(String foodName, String category, Double protein, Double carbos, Double fibra, Double azucar, Double grasas, Double agsat, Double agpoli, Double agmono,
                                                    Double agtrans, Double coles, Double sodio, Double potasio, Double vitaminaa, Double vitaminac, Double calcio, Double hierro) {
         FoodDetailedFragment fragment = new FoodDetailedFragment();
         Bundle args = new Bundle();
         args.putString("foodName", foodName);
+        args.putString("category", category);
         args.putDouble("protein", protein);
         args.putDouble("carbos", carbos);
         args.putDouble("fibra", fibra);
@@ -72,6 +74,7 @@ public class FoodDetailedFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_food_detailed, container, false);
 
         mFoodName = rootView.findViewById(R.id.foodName_detailed);
+        category = rootView.findViewById(R.id.foodGroup);
         proteina = rootView.findViewById(R.id.foodProtein_detailed);
         carbos = rootView.findViewById(R.id.foodcarbs);
         fibra = rootView.findViewById(R.id.foodfiber);
@@ -91,6 +94,7 @@ public class FoodDetailedFragment extends Fragment {
 
         if (getArguments() != null) {
             mFoodName.setText(getArguments().getString("foodName"));
+            category.setText(getArguments().getString("category"));
             proteina.setText(Double.toString(getArguments().getDouble("protein")));
             carbos.setText(Double.toString(getArguments().getDouble("carbos")));
             fibra.setText(Double.toString(getArguments().getDouble("fibra")));

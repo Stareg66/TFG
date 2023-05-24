@@ -23,34 +23,11 @@ import java.util.List;
 
 public class ListFragment extends Fragment {
 
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    private String mParam1;
-    private String mParam2;
     private ListView listView;
     private FoodListAdapter adapter;
 
     public ListFragment() {
         // Required empty public constructor
-    }
-
-    public static ListFragment newInstance(String param1, String param2) {
-        ListFragment fragment = new ListFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -92,6 +69,7 @@ public class ListFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Food food = adapter.getItem(position);
                 String foodName = food.getFoodName();
+                String category = checkCategory(food.getGroup_id());
 
                 Double protein = checkNull(food.getMicronutrientes().getProteina_total());
                 Double carbos = checkNull(food.getMicronutrientes().getCarbohidratos());
@@ -112,7 +90,7 @@ public class ListFragment extends Fragment {
 
                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                 fragmentManager.beginTransaction()
-                        .replace(R.id.nav_host_fragment, FoodDetailedFragment.newInstance(foodName, protein, carbos, fibra, azucar, grasas, agsat, agpoli, agmono, agtrans, coles,
+                        .replace(R.id.nav_host_fragment, FoodDetailedFragment.newInstance(foodName, category, protein, carbos, fibra, azucar, grasas, agsat, agpoli, agmono, agtrans, coles,
                                 sodio, potasio, vitaminaa, vitaminac, calcio, hierro))
                         .addToBackStack(null)
                         .commit();
@@ -138,8 +116,34 @@ public class ListFragment extends Fragment {
         return view;
     }
 
-    public FoodListAdapter getFoodListAdapter(){
-        return adapter;
+    private String checkCategory(Long group_id) {
+        String category = "";
+        if(group_id==1){
+            category="Leche y productos lácteos";
+        } else if(group_id==2){
+            category="Huevos y productos con huevo";
+        } else if(group_id==3){
+            category="Carne y productos cárnicos";
+        } else if(group_id==4){
+            category="Pescados, moluscos, reptiles y crustáceos";
+        } else if(group_id==5){
+            category="Grasas y aceites";
+        } else if(group_id==6){
+            category="Granos y productos con grano";
+        } else if(group_id==7){
+            category="Semillas, nueces y otros productos";
+        } else if(group_id==8){
+            category="Vegetales y productos con vegetales";
+        } else if(group_id==9){
+            category="Frutas y productos con fruta";
+        } else if(group_id==10){
+            category="Azucar, chocolate y otros productos relacionados";
+        } else if(group_id==11){
+            category="Bebidas (sin leche)";
+        } else if(group_id==12){
+            category="Comidas varias";
+        }
+        return category;
     }
 
     public Double checkNull(Double nutrient){

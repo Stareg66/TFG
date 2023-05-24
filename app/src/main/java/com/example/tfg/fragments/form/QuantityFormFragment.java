@@ -103,12 +103,15 @@ public class QuantityFormFragment extends Fragment {
                         if (documentSnapshot.exists()) {
                             Map<String, Object> frequencyList = (Map<String, Object>) documentSnapshot.getData().get("frequencyList");
 
-                            if (frequencyList != null){
+                            if (frequencyList != null) {
                                 int frequency = 0;
 
-                                if (frequencyList.containsKey(String.valueOf(selectedItem.getId()))) {
-                                    Map<String, Object> foodMap = (Map<String, Object>) frequencyList.get(String.valueOf(selectedItem.getId()));
-                                    frequency = ((Long) foodMap.get("frequency")).intValue();
+                                if (frequencyList.containsKey(String.valueOf(selectedItem.getGroup_id()))) {
+                                    Map<String, Object> groupList = (Map<String, Object>) frequencyList.get(String.valueOf(selectedItem.getGroup_id()));
+                                    if (groupList.containsKey(String.valueOf(selectedItem.getId()))) {
+                                        Map<String, Object> foodMap = (Map<String, Object>) groupList.get(String.valueOf(selectedItem.getId()));
+                                        frequency = ((Long) foodMap.get("frequency")).intValue();
+                                    }
                                 }
 
                                 foodNameDetailed.setText(selectedItem.getFoodName());
@@ -144,6 +147,25 @@ public class QuantityFormFragment extends Fragment {
                                             if (documentSnapshot.exists()) {
                                                 Map<String, Object> frequencyList = (Map<String, Object>) documentSnapshot.get("frequencyList");
                                                 if (frequencyList != null) {
+                                                    Map<String, Object> groupList = (Map<String, Object>) frequencyList.get(String.valueOf(selectedFood.getGroup_id()));
+                                                    if (groupList != null) {
+                                                        Map<String, Object> foodMap = (Map<String, Object>) groupList.get(String.valueOf(selectedFood.getId()));
+                                                        if (foodMap != null) {
+                                                            foodMap.put("frequency", Integer.parseInt(frequencyDetailed.getText().toString()));
+                                                            userRef.update("frequencyList." + selectedFood.getGroup_id() + "." + selectedFood.getId(), foodMap);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    });
+                                }
+                                        /*
+                                        @Override
+                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                            if (documentSnapshot.exists()) {
+                                                Map<String, Object> frequencyList = (Map<String, Object>) documentSnapshot.get("frequencyList");
+                                                if (frequencyList != null) {
                                                     Map<String, Object> foodMap = (Map<String, Object>) frequencyList.get(String.valueOf(selectedFood.getId()));
                                                     if (foodMap != null) {
                                                         foodMap.put("frequency", Integer.parseInt(frequencyDetailed.getText().toString()));
@@ -153,7 +175,7 @@ public class QuantityFormFragment extends Fragment {
                                             }
                                         }
                                     });
-                                }
+                                }*/
 
                                 addSelectedItemToLayout(selectedFood, Integer.parseInt(frequencyDetailed.getText().toString()));
                                 popupWindowModify.dismiss();
@@ -183,9 +205,53 @@ public class QuantityFormFragment extends Fragment {
             }
         });
 
+
         return view;
     }
 
+    private void fetchSelectedItemsFromFirestore() {
+        userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+                    Object frequencyListObj = documentSnapshot.get("frequencyList");
+                    if (frequencyListObj != null) {
+                        List<Food> selectedItems = new ArrayList<>();
+                        Map<String, Object> selectedItemsMap = (Map<String, Object>) frequencyListObj;
+                        for (Map.Entry<String, Object> entry : selectedItemsMap.entrySet()) {
+                            String groupId = entry.getKey();
+                            Map<String, Object> groupList = (Map<String, Object>) entry.getValue();
+                            for (Map.Entry<String, Object> foodEntry : groupList.entrySet()) {
+                                String foodId = foodEntry.getKey();
+                                Map<String, Object> foodMap = (Map<String, Object>) foodEntry.getValue();
+
+                                Map<String, Double> micronutrientMap = (Map<String, Double>) foodMap.get("micronutrientes");
+
+                                Micronutrients micronutrients = new Micronutrients(micronutrientMap.get("proteina_total"), micronutrientMap.get("carbohidratos"),
+                                        micronutrientMap.get("fibra_total"),micronutrientMap.get("azucares_totales"),micronutrientMap.get("grasa_total"),
+                                        micronutrientMap.get("ag_saturados_total"),micronutrientMap.get("ag_poliinsaturados_total"),micronutrientMap.get("ag_monoinsaturados_total"),
+                                        micronutrientMap.get("ag_trans_total"),micronutrientMap.get("colesterol"),micronutrientMap.get("sodio"),
+                                        micronutrientMap.get("potasio"),micronutrientMap.get("vitamina_a"),micronutrientMap.get("vitamina_c"),
+                                        micronutrientMap.get("calcio"),micronutrientMap.get("hierro_total"));
+
+                                Food food = new Food(
+                                        Integer.parseInt(foodId),
+                                        (String) foodMap.get("foodName"),
+                                        (Long) foodMap.get("groupId"),
+                                        micronutrients
+                                );
+                                selectedItems.add(food);
+                            }
+                        }
+
+                        selectedItemsAdapter.updateData(selectedItems);
+                    }
+                }
+            }
+        });
+    }
+
+    /*
     private void fetchSelectedItemsFromFirestore() {
         userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -211,6 +277,7 @@ public class QuantityFormFragment extends Fragment {
                             Food food = new Food(
                                     Integer.parseInt(foodId),
                                     (String) foodMap.get("foodName"),
+                                    (Long) foodMap.get("groupId"),
                                     micronutrients
                             );
                             selectedItems.add(food);
@@ -221,33 +288,7 @@ public class QuantityFormFragment extends Fragment {
                 }
             }
         });
-    }
-
-    /*
-    private void fetchSelectedItemsFromFirestore() {
-        userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if (documentSnapshot.exists()) {
-                    Map<String, Object> selectedItemsMap = (Map<String, Object>) documentSnapshot.get("frequencyList");
-                    if (selectedItemsMap != null) {
-                        List<Food> selectedItems = new ArrayList<>();
-                        for (Map.Entry<String, Object> entry : selectedItemsMap.entrySet()) {
-                            String foodId = entry.getKey();
-                            Map<String, Object> foodMap = (Map<String, Object>) entry.getValue();
-
-                            Food food = new Food(
-                                    Integer.parseInt(foodId),
-                                    (String) foodMap.get("foodName")
-                            );
-                            selectedItems.add(food);
-                        }
-                        selectedItemsAdapter.updateData(selectedItems);
-                    }
-                }
-            }
-        });
-    }*/
+    }^*/
 
     private void showPopupListView() {
         View popupView = LayoutInflater.from(requireContext()).inflate(R.layout.food_inlist_popup, null);
@@ -331,6 +372,7 @@ public class QuantityFormFragment extends Fragment {
         Map<String, Object> foodMap = new HashMap<>();
         foodMap.put("foodId", food.getId());
         foodMap.put("foodName", food.getFoodName());
+        foodMap.put("groupId", food.getGroup_id());
 
         Map<String, Double> micronutrientMap = new HashMap<>();
         micronutrientMap.put("proteina_total",food.getMicronutrientes().getProteina_total());
@@ -352,7 +394,7 @@ public class QuantityFormFragment extends Fragment {
 
         foodMap.put("micronutrientes", micronutrientMap);
         foodMap.put("frequency", frequency);
-        userRef.update("frequencyList." + food.getId(), foodMap);
+        userRef.update("frequencyList." + food.getGroup_id() + "." + food.getId(), foodMap);
     }
 
     private void deleteSelectedItemToFirestore(Food food) {
@@ -361,9 +403,39 @@ public class QuantityFormFragment extends Fragment {
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 if (documentSnapshot.exists()) {
                     Map<String, Object> frequencyList = (Map<String, Object>) documentSnapshot.get("frequencyList");
+                    if (frequencyList != null) {
+                        Long groupId = food.getGroup_id();
+                        if (frequencyList.containsKey(String.valueOf(groupId))) {
+                            Map<String, Object> groupList = (Map<String, Object>) frequencyList.get(String.valueOf(groupId));
+                            if (groupList != null && groupList.containsKey(String.valueOf(food.getId()))) {
+                                groupList.remove(String.valueOf(food.getId()));
+                                userRef.update("frequencyList." + groupId, groupList)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void unused) {
+                                                selectedItemsList.remove(food);
+                                                fetchSelectedItemsFromFirestore();
+                                            }
+                                        });
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+
+    /*
+    private void deleteSelectedItemToFirestore(Food food) {
+        userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+                    Map<String, Object> frequencyList = (Map<String, Object>) documentSnapshot.get("frequencyList");
                     if (frequencyList != null && frequencyList.containsKey(String.valueOf(food.getId()))) {
                         frequencyList.remove(String.valueOf(food.getId()));
-                        userRef.update("frequencyList", frequencyList)
+                        userRef.update("frequencyList.", frequencyList)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void unused) {
@@ -375,7 +447,7 @@ public class QuantityFormFragment extends Fragment {
                 }
             }
         });
-    }
+    }*/
 
     /*
     private void deleteSelectedItemToFirestore(Food food){

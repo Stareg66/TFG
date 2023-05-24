@@ -178,6 +178,7 @@ public class SecondDayFormFragment extends Fragment {
                             Food food = new Food(
                                     Integer.parseInt(foodId),
                                     (String) foodMap.get("foodName"),
+                                    (Long) foodMap.get("groupId"),
                                     micronutrients
                             );
                             selectedItems.add(food);
@@ -204,6 +205,7 @@ public class SecondDayFormFragment extends Fragment {
                             Food food = new Food(
                                     Integer.parseInt(foodId),
                                     (String) foodMap.get("foodName"),
+                                    (Long) foodMap.get("groupId"),
                                     micronutrients
                             );
                             selectedItems.add(food);
@@ -230,6 +232,7 @@ public class SecondDayFormFragment extends Fragment {
                             Food food = new Food(
                                     Integer.parseInt(foodId),
                                     (String) foodMap.get("foodName"),
+                                    (Long) foodMap.get("groupId"),
                                     micronutrients
                             );
                             selectedItems.add(food);
@@ -300,6 +303,7 @@ public class SecondDayFormFragment extends Fragment {
         Map<String, Object> foodMap = new HashMap<>();
         foodMap.put("foodId", food.getId());
         foodMap.put("foodName", food.getFoodName());
+        foodMap.put("groupId", food.getGroup_id());
 
         Map<String, Double> micronutrientMap = new HashMap<>();
         micronutrientMap.put("proteina_total",food.getMicronutrientes().getProteina_total());
@@ -325,12 +329,15 @@ public class SecondDayFormFragment extends Fragment {
         switch (time) {
             case "breakfast":
                 userRef.update("selectedItemsMorning2Day." + food.getId(), foodMap);
+                increaseFoodFrequency(food);
                 break;
             case "lunch":
                 userRef.update("selectedItemsLunch2Day." + food.getId(), foodMap);
+                increaseFoodFrequency(food);
                 break;
             case "dinner":
                 userRef.update("selectedItemsDinner2Day." + food.getId(), foodMap);
+                increaseFoodFrequency(food);
                 break;
         }
     }
@@ -350,6 +357,7 @@ public class SecondDayFormFragment extends Fragment {
                                             @Override
                                             public void onSuccess(Void unused) {
                                                 selectedItemsList.remove(food);
+                                                decreaseFoodFrequency(food);
                                             }
                                         });
                             }
@@ -370,6 +378,7 @@ public class SecondDayFormFragment extends Fragment {
                                             @Override
                                             public void onSuccess(Void unused) {
                                                 selectedItemsList.remove(food);
+                                                decreaseFoodFrequency(food);
                                             }
                                         });
                             }
@@ -390,6 +399,7 @@ public class SecondDayFormFragment extends Fragment {
                                             @Override
                                             public void onSuccess(Void unused) {
                                                 selectedItemsList.remove(food);
+                                                decreaseFoodFrequency(food);
                                             }
                                         });
                             }
@@ -464,5 +474,126 @@ public class SecondDayFormFragment extends Fragment {
         String apiUrl = "https://sanger.dia.fi.upm.es/foodnorm/foods/" + query;
         FoodListConnection connection = new FoodListConnection(null, adapter);
         connection.execute(apiUrl);
+    }
+
+    private void increaseFoodFrequency(Food food) {
+        userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+                    Map<String, Object> frequencyList = (Map<String, Object>) documentSnapshot.get("frequencyList");
+                    if (frequencyList != null) {
+                        Long groupId = food.getGroup_id();
+                        String foodId = String.valueOf(food.getId());
+
+                        if (frequencyList.containsKey(String.valueOf(groupId))) {
+                            Map<String, Object> groupList = (Map<String, Object>) frequencyList.get(String.valueOf(groupId));
+                            if (groupList != null && groupList.containsKey(foodId)) {
+                                Map<String, Object> foodMap = (Map<String, Object>) groupList.get(foodId);
+                                if (foodMap != null && foodMap.containsKey("frequency")) {
+                                    Long currentFrequency = (Long) foodMap.get("frequency");
+                                    Long newFrequency = currentFrequency + 1;
+                                    foodMap.put("frequency", newFrequency);
+                                    userRef.update("frequencyList." + groupId + "." + foodId, foodMap);
+                                }
+                            } else {
+                                // Food doesn't exist in the group list, add it with initial frequency 1
+                                Map<String, Object> foodMap = new HashMap<>();
+                                foodMap.put("foodId", food.getId());
+                                foodMap.put("foodName", food.getFoodName());
+                                foodMap.put("groupId", food.getGroup_id());
+                                foodMap.put("frequency", 1);
+
+                                Map<String, Double> micronutrientMap = new HashMap<>();
+                                micronutrientMap.put("proteina_total",food.getMicronutrientes().getProteina_total());
+                                micronutrientMap.put("carbohidratos",food.getMicronutrientes().getCarbohidratos());
+                                micronutrientMap.put("fibra_total",food.getMicronutrientes().getFibra_total());
+                                micronutrientMap.put("azucares_totales",food.getMicronutrientes().getAzucares_totales());
+                                micronutrientMap.put("grasa_total",food.getMicronutrientes().getGrasa_total());
+                                micronutrientMap.put("ag_saturados_total",food.getMicronutrientes().getAg_saturados_total());
+                                micronutrientMap.put("ag_poliinsaturados_total",food.getMicronutrientes().getAg_poliinsaturados_total());
+                                micronutrientMap.put("ag_monoinsaturados_total",food.getMicronutrientes().getAg_monoinsaturados_total());
+                                micronutrientMap.put("ag_trans_total",food.getMicronutrientes().getAg_trans_total());
+                                micronutrientMap.put("colesterol",food.getMicronutrientes().getColesterol());
+                                micronutrientMap.put("sodio",food.getMicronutrientes().getSodio());
+                                micronutrientMap.put("potasio",food.getMicronutrientes().getPotasio());
+                                micronutrientMap.put("vitamina_a",food.getMicronutrientes().getVitamina_a());
+                                micronutrientMap.put("vitamina_c",food.getMicronutrientes().getVitamina_c());
+                                micronutrientMap.put("calcio",food.getMicronutrientes().getCalcio());
+                                micronutrientMap.put("hierro_total",food.getMicronutrientes().getHierro_total());
+
+                                foodMap.put("micronutrientes", micronutrientMap);
+                                groupList.put(foodId, foodMap);
+                                userRef.update("frequencyList." + groupId, groupList);
+                            }
+                        } else {
+                            // Group doesn't exist in the frequency list, create it with the food and initial frequency 1
+                            Map<String, Object> groupList = new HashMap<>();
+                            Map<String, Object> foodMap = new HashMap<>();
+                            foodMap.put("foodId", food.getId());
+                            foodMap.put("foodName", food.getFoodName());
+                            foodMap.put("groupId", food.getGroup_id());
+                            foodMap.put("frequency", 1);
+
+                            Map<String, Double> micronutrientMap = new HashMap<>();
+                            micronutrientMap.put("proteina_total",food.getMicronutrientes().getProteina_total());
+                            micronutrientMap.put("carbohidratos",food.getMicronutrientes().getCarbohidratos());
+                            micronutrientMap.put("fibra_total",food.getMicronutrientes().getFibra_total());
+                            micronutrientMap.put("azucares_totales",food.getMicronutrientes().getAzucares_totales());
+                            micronutrientMap.put("grasa_total",food.getMicronutrientes().getGrasa_total());
+                            micronutrientMap.put("ag_saturados_total",food.getMicronutrientes().getAg_saturados_total());
+                            micronutrientMap.put("ag_poliinsaturados_total",food.getMicronutrientes().getAg_poliinsaturados_total());
+                            micronutrientMap.put("ag_monoinsaturados_total",food.getMicronutrientes().getAg_monoinsaturados_total());
+                            micronutrientMap.put("ag_trans_total",food.getMicronutrientes().getAg_trans_total());
+                            micronutrientMap.put("colesterol",food.getMicronutrientes().getColesterol());
+                            micronutrientMap.put("sodio",food.getMicronutrientes().getSodio());
+                            micronutrientMap.put("potasio",food.getMicronutrientes().getPotasio());
+                            micronutrientMap.put("vitamina_a",food.getMicronutrientes().getVitamina_a());
+                            micronutrientMap.put("vitamina_c",food.getMicronutrientes().getVitamina_c());
+                            micronutrientMap.put("calcio",food.getMicronutrientes().getCalcio());
+                            micronutrientMap.put("hierro_total",food.getMicronutrientes().getHierro_total());
+
+                            foodMap.put("micronutrientes", micronutrientMap);
+                            groupList.put(foodId, foodMap);
+                            frequencyList.put(String.valueOf(groupId), groupList);
+                            userRef.update("frequencyList", frequencyList);
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    private void decreaseFoodFrequency(Food food) {
+        userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+                    Map<String, Object> frequencyList = (Map<String, Object>) documentSnapshot.get("frequencyList");
+                    if (frequencyList != null) {
+                        Long groupId = food.getGroup_id();
+                        String foodId = String.valueOf(food.getId());
+
+                        if (frequencyList.containsKey(String.valueOf(groupId))) {
+                            Map<String, Object> groupList = (Map<String, Object>) frequencyList.get(String.valueOf(groupId));
+                            if (groupList != null && groupList.containsKey(foodId)) {
+                                Map<String, Object> foodMap = (Map<String, Object>) groupList.get(foodId);
+                                if (foodMap != null && foodMap.containsKey("frequency")) {
+                                    Long currentFrequency = (Long) foodMap.get("frequency");
+                                    Long newFrequency = currentFrequency - 1;
+                                    if (newFrequency > 0) {
+                                        foodMap.put("frequency", newFrequency);
+                                        userRef.update("frequencyList." + groupId + "." + foodId, foodMap);
+                                    } else {
+                                        groupList.remove(foodId);
+                                        userRef.update("frequencyList." + groupId, groupList);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        });
     }
 }

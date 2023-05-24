@@ -21,15 +21,28 @@
             android:layout_marginStart="16dp" />
 
         <TextView
+            android:id="@+id/foodGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:layout_marginTop="12dp"
+            android:text="Category"
+            android:layout_below="@+id/foodName_detailed"
+            android:layout_marginStart="16dp" />
+
+
+        <TextView
             android:id="@+id/food_protein_detailed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="17sp"
             android:textStyle="bold"
             android:text="Proteina:"
-            android:layout_below="@+id/foodName_detailed"
+            android:layout_below="@+id/foodGroup"
             android:layout_marginTop="12dp"
             android:layout_marginStart="16dp"/>
+
 
         <TextView
             android:id="@+id/foodProtein_detailed"
@@ -283,7 +296,7 @@
             android:textStyle="bold"
             android:text="Ácidos grasos"
             android:layout_below="@+id/food_grasa"
-            android:layout_marginTop="35dp"
+            android:layout_marginTop="12dp"
             android:layout_marginStart="16dp"/>
 
         <TextView
