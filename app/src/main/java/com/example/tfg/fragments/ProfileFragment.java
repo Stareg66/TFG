@@ -14,6 +14,11 @@ import android.widget.TextView;
 import com.example.tfg.R;
 import com.example.tfg.food.Food;
 import com.example.tfg.food.Micronutrients;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -24,6 +29,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +40,7 @@ public class ProfileFragment extends Fragment {
     //User
     private String userId;
     private DocumentReference userRef;
+    private PieChart pieChart;
 
     Double totalProtein = 0.0;
     Double totalCarbs = 0.0;
@@ -63,26 +71,13 @@ public class ProfileFragment extends Fragment {
         userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         userRef = FirebaseFirestore.getInstance().collection("users").document(userId);
 
-        /*
-        totalProtein = 0.0;
-        totalCarbs = 0.0;
-        totalFiber = 0.0;
-        totalSugar = 0.0;
-        totalFat = 0.0;
-        totalAgSat = 0.0;
-        totalAgPoli = 0.0;
-        totalAgMono = 0.0;
-        totalAgTrans = 0.0;
-        totalColesterol = 0.0;
-        totalSodium = 0.0;
-        totalPotasium = 0.0;
-        totalVitaminA = 0.0;
-        totalVitaminC = 0.0;
-        totalCalcium = 0.0;
-        totalIron = 0.0;*/
+        pieChart = view.findViewById(R.id.recommendationChart);
 
         Button showRecommendations = view.findViewById(R.id.buttonRecommendation);
         TextView recommendationText = view.findViewById(R.id.textRecommended);
+        TextView emailUser = view.findViewById(R.id.emailProfile);
+
+        emailUser.setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
 
         showRecommendations.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,13 +86,76 @@ public class ProfileFragment extends Fragment {
                     @Override
                     public void onSuccess(Void unused) {
                         String totalNutrients = calculateRecommendation();
+
+                        List<PieEntry> entries = new ArrayList<>();
+                        int normalizationFactor = 0;
+
+                        if(totalProtein > normalizationFactor){
+                            entries.add(new PieEntry(totalProtein.floatValue(), "Proteina"));
+                        }
+                        if(totalFiber > normalizationFactor){
+                            entries.add(new PieEntry(totalFiber.floatValue(), "Fibra"));
+                        }
+                        if(totalSugar > normalizationFactor){
+                            entries.add(new PieEntry(totalSugar.floatValue(), "Azucar"));
+                        }
+                        if(totalFat > normalizationFactor){
+                            entries.add(new PieEntry(totalFat.floatValue(), "Grasas"));
+                        }
+                        if(totalAgSat > normalizationFactor){
+                            entries.add(new PieEntry(totalAgSat.floatValue(), "AG Saturados"));
+                        }
+                        if(totalAgPoli > normalizationFactor){
+                            entries.add(new PieEntry(totalAgPoli.floatValue(), "AG Poliinsaturados"));
+                        }
+                        if(totalAgMono > normalizationFactor){
+                            entries.add(new PieEntry(totalAgMono.floatValue(), "AG Monoinsaturados"));
+                        }
+                        if(totalAgTrans > normalizationFactor){
+                            entries.add(new PieEntry(totalAgTrans.floatValue(), "AG Trans"));
+                        }
+                        if(totalColesterol > normalizationFactor){
+                            entries.add(new PieEntry(totalColesterol.floatValue(), "Colesterol"));
+                        }
+                        if(totalSodium > normalizationFactor){
+                            entries.add(new PieEntry(totalSodium.floatValue(), "Sodio"));
+                        }
+                        if(totalPotasium > normalizationFactor){
+                            entries.add(new PieEntry(totalPotasium.floatValue(), "Potasio"));
+                        }
+                        if(totalVitaminA > normalizationFactor){
+                            entries.add(new PieEntry(totalVitaminA.floatValue(), "Vitamina A"));
+                        }
+                        if(totalVitaminC > normalizationFactor) {
+                            entries.add(new PieEntry(totalVitaminC.floatValue(), "Vitamina C"));
+                        }
+                        if(totalCalcium > normalizationFactor) {
+                            entries.add(new PieEntry(totalCalcium.floatValue(), "Calcio"));
+                        }
+                        if(totalIron > normalizationFactor) {
+                            entries.add(new PieEntry(totalIron.floatValue(), "Hierro"));
+                        }
+
+                        PieDataSet dataSet = new PieDataSet(entries, "Nutrientes totales");
+                        dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+
+                        PieData data = new PieData(dataSet);
+                        data.setValueTextSize(12f);
+
+                        pieChart.setData(data);
+
+                        pieChart.getDescription().setEnabled(false);
+                        pieChart.setEntryLabelTextSize(12f);
+                        pieChart.setCenterText("Micronutrientes");
+                        pieChart.setCenterTextSize(12f);
+                        pieChart.animateY(1000);
+                        pieChart.invalidate();
+
                         recommendationText.setText(totalNutrients);
                     }
                 });
             }
         });
-
-
 
         return view;
     }
@@ -167,6 +225,23 @@ public class ProfileFragment extends Fragment {
                                 micronutrientMap.get("hierro_total")
                         );
 
+                        totalProtein = 0.0;
+                        totalCarbs = 0.0;
+                        totalFiber = 0.0;
+                        totalSugar = 0.0;
+                        totalFat = 0.0;
+                        totalAgSat = 0.0;
+                        totalAgPoli = 0.0;
+                        totalAgMono = 0.0;
+                        totalAgTrans = 0.0;
+                        totalColesterol = 0.0;
+                        totalSodium = 0.0;
+                        totalPotasium = 0.0;
+                        totalVitaminA = 0.0;
+                        totalVitaminC = 0.0;
+                        totalCalcium = 0.0;
+                        totalIron = 0.0;
+
                         totalProtein += checkNull(micronutrients.getProteina_total());
                         totalCarbs += checkNull(micronutrients.getCarbohidratos());
                         totalFiber += checkNull(micronutrients.getFibra_total());
@@ -201,6 +276,8 @@ public class ProfileFragment extends Fragment {
     }
 
     private String calculateRecommendation() {
+
+
         StringBuilder recommendations = new StringBuilder();
         if(totalProtein < 100){
             recommendations.append("Necesitas consumir mas proteina.\n");
