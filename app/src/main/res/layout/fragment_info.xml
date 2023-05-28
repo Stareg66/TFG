@@ -1,16 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".fragments.InfoFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/info"
+        android:text="Aplicacion para el control \n de dietas y recomendaciones"
         android:layout_gravity="center"
-        android:textSize="20sp"/>
+        android:layout_marginTop="100dp"
+        android:textAlignment="center"
+        android:textSize="25sp"
+        android:textStyle="bold"/>
 
-</FrameLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Realizada por\n Manuel Rueda Algar"
+        android:textAlignment="center"
+        android:layout_marginTop="75dp"
+        android:layout_gravity="center"
+        android:textSize="25sp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="UPM \n Ingeniería Informática"
+        android:textAlignment="center"
+        android:layout_marginTop="300dp"
+        android:layout_gravity="center"
+        android:textSize="25sp"/>
+
+</LinearLayout>

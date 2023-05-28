@@ -1,11 +1,9 @@
 package com.example.tfg.food;
 
 import android.content.Context;
-import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
@@ -18,7 +16,6 @@ import androidx.annotation.Nullable;
 import com.example.tfg.R;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class FoodListAdapter extends BaseAdapter implements Filterable {

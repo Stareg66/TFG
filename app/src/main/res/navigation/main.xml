@@ -30,11 +30,6 @@
         android:label="Info"
         tools:layout="@layout/fragment_info" />
     <fragment
-        android:id="@+id/menu_Feedback"
-        android:name="com.example.tfg.fragments.FeedbackFragment"
-        android:label="Feedback"
-        tools:layout="@layout/fragment_feedback" />
-    <fragment
         android:id="@+id/foodDetailedFragment"
         android:name="com.example.tfg.fragments.FoodDetailedFragment"
         android:label="fragment_food_detailed"

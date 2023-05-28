@@ -19,7 +19,6 @@ import com.example.tfg.food.FoodListAdapter;
 import com.example.tfg.food.FoodListConnection;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ListFragment extends Fragment {
 

@@ -11,11 +11,6 @@ import android.widget.TextView;
 
 import com.example.tfg.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link FoodDetailedFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class FoodDetailedFragment extends Fragment {
 
     private TextView mFoodName;
